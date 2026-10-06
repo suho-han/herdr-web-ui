@@ -21,6 +21,8 @@ between releases do not reach them. Remote-PC runtime bundles are versioned sepa
 - Updating an already current remote bridge verifies and reuses it without downloading or restarting it again. ([#519](https://github.com/devswha/herdr-web-ui/pull/519) by @suho-han)
 - Development-server PC setup and bridge update approvals preserve the browser's origin,
   avoiding a 403 when the UI on port 5173 uses the bridge on port 7317. ([#519](https://github.com/devswha/herdr-web-ui/pull/519) by @suho-han)
+- Terminal rows leave room above enlarged Korean and accented letters, preventing their tops from being clipped when changing font size.
+- Zoom keys and modified wheel gestures inside the terminal change its font size without enlarging the rest of the page.
 - The message box hides scrollbars at every zoom level while keeping long drafts scrollable and wrapping long lines.
 - Codex chat hides internal memory citation blocks and pairs the answer with its display record,
   so a reply that uses memory appears once without raw citation markup. Quoted code examples
