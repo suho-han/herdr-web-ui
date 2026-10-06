@@ -10,6 +10,7 @@ between releases do not reach them. Remote-PC runtime bundles are versioned sepa
 ### Added
 - Background PC installations stay accessible from a download icon beside Settings, with progress, results, and a way to reopen setup. ([#519](https://github.com/devswha/herdr-web-ui/pull/519) by @suho-han)
 - Remote PC headers offer reconnect controls, and bridge conflicts explain how to align connected apps and retry without reinstalling. Newer remote bridges cannot be downgraded by an older app. ([#519](https://github.com/devswha/herdr-web-ui/pull/519) by @suho-han)
+- Change models and reasoning effort from the chat composer for Codex, Claude Code and pi without leaving chat or clearing a draft; Escape or clicking outside dismisses the selection without changing the model or effort.
 
 ### Changed
 - The message box follows **Settings → Chat font size**, as the transcript and prompt cards
