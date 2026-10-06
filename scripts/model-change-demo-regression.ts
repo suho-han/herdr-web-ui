@@ -91,6 +91,17 @@ try {
         const input = page.locator(".composer textarea");
         assert.ok(await page.locator('.composer-model-label').isVisible(), 'current model is shown before opening');
         assert.ok(await page.locator('.composer-reasoning-short').isVisible(), 'current effort is shown before opening');
+        await page.evaluate(() => { document.documentElement.style.zoom = "2"; });
+        await page.waitForFunction(() => document.querySelector('.composer-surface')?.hasAttribute('data-model-row'));
+        assert.ok(await page.locator('.composer-reasoning-short').isVisible(), 'current effort stays visible at 200% zoom');
+        const zoomedLabels = await page.evaluate(() => {
+          const model = document.querySelector<HTMLElement>('.composer-model-label')!;
+          const effort = document.querySelector<HTMLElement>('.composer-reasoning-short')!;
+          return { model: model.textContent, effort: effort.textContent, modelWhole: model.scrollWidth <= model.clientWidth, effortWhole: effort.scrollWidth <= effort.clientWidth, modelWidth: [model.scrollWidth, model.clientWidth], draw: document.querySelector('.composer-status')?.getAttribute('data-model'), row: document.querySelector('.composer-surface')?.hasAttribute('data-model-row') };
+        });
+        assert.equal(zoomedLabels.modelWhole, true, `current model stays whole at 200% zoom: ${JSON.stringify(zoomedLabels)}`);
+        assert.equal(zoomedLabels.effortWhole, true, `current effort stays whole at 200% zoom: ${JSON.stringify(zoomedLabels)}`);
+        await page.evaluate(() => { document.documentElement.style.zoom = "1"; });
         assert.equal(await page.locator('.prompt-card').count(), 0);
 
         await input.fill("Keep this draft");
@@ -201,7 +212,8 @@ try {
           assert.equal(await mobile.evaluate(() => (window as any).submits.length), count, 'context ring does not submit');
           assert.ok(await button.isVisible());
           const box = await button.boundingBox();
-          assert.ok(box && box.width >= 14 && box.x >= 0 && box.x + box.width <= 390);
+          const layout = await mobile.evaluate(() => ({ draw: document.querySelector('.composer-status')?.getAttribute('data-model'), row: document.querySelector('.composer-surface')?.hasAttribute('data-model-row') }));
+          assert.ok(box && box.width >= 14 && box.x >= 0 && box.x + box.width <= 390, `model control outside phone: ${JSON.stringify({ box, layout })}`);
           await button.tap();
           await mobile.locator('.prompt-card').waitFor();
           await mobile.screenshot({ path: '/tmp/herdr-model-change-mobile.png' });
